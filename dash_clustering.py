@@ -135,9 +135,6 @@ def run_dimensionalidad():
     fig.update_yaxes(title_text='Varianza')
     st.plotly_chart(fig)
     
-    fig1 = px.scatter(x=x_pca[:,0], y=x_pca[:,1], title='Proyeccion de los datos en PCA con 2 componentes')
-    st.plotly_chart(fig1)
-    
     k_cluster = st.slider('Elija un numero de clusters', min_value=2, max_value=10, step=1)
     
     # aplicando el algoritmo k-means
