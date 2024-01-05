@@ -51,7 +51,7 @@ def run_features():
 
     
     fig2 = plt.figure(figsize=(8,5))
-    sns.heatmap(data.corr(), annot=True, cmap='coolwarm')
+    sns.heatmap(data[['Age', 'Annual Income (k$)', 'Spending Score (1-100)']].corr(), annot=True, cmap='coolwarm')
     plt.title('Diagrama de calor para ver las correlaciones de las variables')
     st.pyplot(fig2)
     
