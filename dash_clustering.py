@@ -12,6 +12,7 @@ from sklearn.metrics import silhouette_samples, silhouette_score, pairwise_dista
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, normalize
 import scipy.cluster.hierarchy as shc
 import plotly.figure_factory as ff
+from sklearn.decomposition import PCA
 warnings.filterwarnings('ignore')
 
 # codigo principal para la implementacion del dash
@@ -31,7 +32,7 @@ def main():
         run_features()  
     elif step == 'Resultados de cluster':
         run_clustering()
-    elif step == 'Reduccion de Dimensionalidad':
+    elif step == 'Reduccion Dimensionalidad':
         run_dimensionalidad()
     
     
@@ -120,8 +121,45 @@ def run_clustering():
         st.plotly_chart(fig7)
 
 def run_dimensionalidad():
-    pass
-
+    st.markdown('# **Reduccion de dimensionalidad**')
+    array_x = data[['Annual Income (k$)', 'Spending Score (1-100)', 'Age']]
+    nums = range(1,4)
+    var_ratio = []
+    for num in nums:
+        pca = PCA(n_components=num).fit(array_x)
+        var_ratio.append(np.sum(pca.explained_variance_ratio_))
+    
+    x_pca = pca.transform(array_x)
+    fig = px.line(x=nums, y=var_ratio, title='Numero de componentes v/s Varianza', markers=True)
+    fig.update_xaxes(title_text='Numero de componentes')
+    fig.update_yaxes(title_text='Varianza')
+    st.plotly_chart(fig)
+    
+    fig1 = px.scatter(x=x_pca[:,0], y=x_pca[:,1], title='Proyeccion de los datos en PCA con 2 componentes')
+    st.plotly_chart(fig1)
+    
+    k_cluster = st.slider('Elija un numero de clusters', min_value=2, max_value=10, step=1)
+    
+    # aplicando el algoritmo k-means
+    clustering_kmeans = KMeans(n_clusters=k_cluster, random_state=10, n_init='auto').fit(x_pca)
+    data_kmeans = data.copy()
+    data_kmeans['Cluster_Kmeans'] = clustering_kmeans.labels_
+    fig3 = px.scatter(x_pca, x=x_pca[:,0], y=x_pca[:,1], title=f'Scatter plot de Componente1 vs Componente2', 
+                     color=clustering_kmeans.labels_.astype(str))
+    st.plotly_chart(fig3)
+        
+    # aplicando el algoritmo jerarquico
+    data_jerarquico_2 = data.copy()
+    cluster_jerarquico_2 = AgglomerativeClustering(n_clusters=k_cluster, metric='euclidean', linkage='average')
+    cluster_jerarquico_2.fit_predict(data_jerarquico_2[['Annual Income (k$)', 'Spending Score (1-100)', 'Age']])
+    data_jerarquico_2['Cluster_Jerarquico_2'] = cluster_jerarquico_2.labels_
+    fig7 = px.scatter(x_pca, x=x_pca[:,0], y=x_pca[:,1], title=f'Scatter plot de Componente1 vs Componente2',
+                        color=cluster_jerarquico_2.labels_.astype(str))
+    st.plotly_chart(fig7)
+    
+    
+    
+    
 def run_introduccion():
     st.write('aca va la introduccion')
 
