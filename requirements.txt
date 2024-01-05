@@ -4,5 +4,5 @@ plotly
 plotly-express
 numpy
 matplotlib
-sklearn
+sklearn-learn
 scipy
