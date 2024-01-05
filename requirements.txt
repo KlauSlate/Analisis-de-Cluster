@@ -4,6 +4,6 @@ plotly
 plotly-express
 numpy
 matplotlib
-sklearn-learn
+scikit-learn
 scipy
 pip
