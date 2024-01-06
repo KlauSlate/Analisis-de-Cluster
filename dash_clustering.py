@@ -155,8 +155,6 @@ def run_dimensionalidad():
     st.plotly_chart(fig7)
     
     
-    
-    
 def run_introduccion():
     st.write('aca va la introduccion')
 
