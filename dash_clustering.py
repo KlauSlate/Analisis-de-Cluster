@@ -141,7 +141,7 @@ def run_dimensionalidad():
     clustering_kmeans = KMeans(n_clusters=k_cluster, random_state=10, n_init='auto').fit(x_pca)
     data_kmeans = data.copy()
     data_kmeans['Cluster_Kmeans'] = clustering_kmeans.labels_
-    fig3 = px.scatter(x_pca, x=x_pca[:,0], y=x_pca[:,1], title=f'Scatter plot de Componente1 vs Componente2', 
+    fig3 = px.scatter(x_pca, x=x_pca[:,0], y=x_pca[:,1], title=f'Scatter plot de Componente1 vs Componente2 Algoritmo K-Means', 
                      color=clustering_kmeans.labels_.astype(str))
     st.plotly_chart(fig3)
         
@@ -150,7 +150,7 @@ def run_dimensionalidad():
     cluster_jerarquico_2 = AgglomerativeClustering(n_clusters=k_cluster, metric='euclidean', linkage='average')
     cluster_jerarquico_2.fit_predict(data_jerarquico_2[['Annual Income (k$)', 'Spending Score (1-100)', 'Age']])
     data_jerarquico_2['Cluster_Jerarquico_2'] = cluster_jerarquico_2.labels_
-    fig7 = px.scatter(x_pca, x=x_pca[:,0], y=x_pca[:,1], title=f'Scatter plot de Componente1 vs Componente2',
+    fig7 = px.scatter(x_pca, x=x_pca[:,0], y=x_pca[:,1], title=f'Scatter plot de Componente1 vs Componente2 algoritmo Jerarquico',
                         color=cluster_jerarquico_2.labels_.astype(str))
     st.plotly_chart(fig7)
     
